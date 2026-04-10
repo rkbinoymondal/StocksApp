@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <!-- Delete Button -->
+        <!-- Delete button added -->
         <ImageButton
             android:id="@+id/btnDeleteStock"
             android:layout_width="28dp"
@@ -25,7 +25,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
-        <!-- Circular Icon -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/mcvStockIcon"
             android:layout_width="40dp"
@@ -48,7 +47,6 @@
                 tools:text="A" />
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Stock Info -->
         <LinearLayout
             android:id="@+id/llStockInfo"
             android:layout_width="0dp"
@@ -80,7 +78,6 @@
                 tools:text="Apple Inc." />
         </LinearLayout>
 
-        <!-- Price Info -->
         <LinearLayout
             android:id="@+id/llStockPriceInfo"
             android:layout_width="wrap_content"

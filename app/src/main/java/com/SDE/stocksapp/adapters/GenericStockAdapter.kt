@@ -1,6 +1,5 @@
 package com.SDE.stocksapp.adapters
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,20 +14,19 @@ import com.SDE.stocksapp.util.formatPercentage
 import com.SDE.stocksapp.util.formatPrice
 import java.util.Locale
 
-class GenericStockAdapter(
-    private val showDeleteButton: Boolean = false,
-    private val onDeleteClick: ((Stock) -> Unit)? = null
-) : RecyclerView.Adapter<GenericStockAdapter.StockViewHolder>() {
+class GenericStockAdapter :
+    RecyclerView.Adapter<GenericStockAdapter.StockViewHolder>() {
 
     inner class StockViewHolder(val binding: ItemStockCardBinding) :
         RecyclerView.ViewHolder(binding.root)
+
+    var showDeleteButton = false
 
     private val differCallback = object : DiffUtil.ItemCallback<Stock>() {
         override fun areItemsTheSame(oldItem: Stock, newItem: Stock): Boolean {
             return oldItem.ticker == newItem.ticker
         }
 
-        @SuppressLint("DiffUtilEquals")
         override fun areContentsTheSame(oldItem: Stock, newItem: Stock): Boolean {
             return oldItem == newItem
         }
@@ -46,39 +44,43 @@ class GenericStockAdapter(
     }
 
     override fun onBindViewHolder(holder: StockViewHolder, position: Int) {
+
         val stock = differ.currentList[position]
+        val binding = holder.binding
 
-        holder.binding.apply {
+        binding.tvStockIconText.text =
+            stock.ticker.take(1).uppercase(Locale.getDefault())
 
-            tvStockIconText.text = stock.ticker.take(1).uppercase(Locale.getDefault())
-            tvStockName.text = stock.ticker
-            tvCompanyName.text = stock.ticker
+        binding.tvStockName.text = stock.ticker
+        binding.tvCompanyName.text = stock.ticker
 
-            tvStockPrice.text = stock.price.formatPrice()
-            tvStockChange.text = stock.change_percentage.formatPercentage()
+        binding.tvStockPrice.text = stock.price.formatPrice()
+        binding.tvStockChange.text = stock.change_percentage.formatPercentage()
 
-            val changePercent =
-                stock.change_percentage.replace("%", "").toDoubleOrNull() ?: 0.0
+        val changePercent =
+            stock.change_percentage.replace("%", "").toDoubleOrNull() ?: 0.0
 
-            val colorRes = if (changePercent >= 0) {
-                R.color.finance_positive
-            } else {
-                R.color.finance_negative
-            }
+        val colorRes = if (changePercent >= 0) {
+            R.color.finance_positive
+        } else {
+            R.color.finance_negative
+        }
 
-            tvStockChange.setTextColor(ContextCompat.getColor(root.context, colorRes))
+        binding.tvStockChange.setTextColor(
+            ContextCompat.getColor(binding.root.context, colorRes)
+        )
 
-            // normal click
-            root.setOnClickListener {
-                onItemClickListener?.invoke(stock)
-            }
+        binding.btnDeleteStock.visibility =
+            if (showDeleteButton) View.VISIBLE else View.GONE
 
-            btnDeleteStock.visibility =
-                if (showDeleteButton) View.VISIBLE else View.GONE
+        binding.root.setOnClickListener {
+            onItemClickListener?.invoke(stock)
+        }
 
-            //DELETE BUTTON FEATURE ADDED
-            btnDeleteStock.setOnClickListener {
-                onDeleteClick?.invoke(stock)
+        binding.btnDeleteStock.setOnClickListener {
+            val pos = holder.adapterPosition   // ✅ FIXED LINE
+            if (pos != RecyclerView.NO_POSITION) {
+                onDeleteClickListener?.invoke(stock, pos)
             }
         }
     }
@@ -89,5 +91,11 @@ class GenericStockAdapter(
 
     fun setOnItemClickListener(listener: (Stock) -> Unit) {
         onItemClickListener = listener
+    }
+
+    private var onDeleteClickListener: ((Stock, Int) -> Unit)? = null
+
+    fun setOnDeleteClickListener(listener: (Stock, Int) -> Unit) {
+        onDeleteClickListener = listener
     }
 }
