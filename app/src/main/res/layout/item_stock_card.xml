@@ -15,7 +15,17 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <!-- Circular Initials Avatar -->
+        <!-- Delete Button -->
+        <ImageButton
+            android:id="@+id/btnDeleteStock"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/delete_24dp_e3e3e3_fill0_wght400_grad0_opsz24"
+            android:background="@android:color/transparent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <!-- Circular Icon -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/mcvStockIcon"
             android:layout_width="40dp"
@@ -38,7 +48,7 @@
                 tools:text="A" />
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Middle-Left: Ticker and Company Name -->
+        <!-- Stock Info -->
         <LinearLayout
             android:id="@+id/llStockInfo"
             android:layout_width="0dp"
@@ -70,7 +80,7 @@
                 tools:text="Apple Inc." />
         </LinearLayout>
 
-        <!-- Far Right: Price and Percentage Change -->
+        <!-- Price Info -->
         <LinearLayout
             android:id="@+id/llStockPriceInfo"
             android:layout_width="wrap_content"
@@ -78,7 +88,7 @@
             android:gravity="end"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnDeleteStock"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
@@ -96,8 +106,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                tools:text="+1.25%"
-                tools:textColor="@color/finance_positive" />
+                tools:text="+1.25%" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
