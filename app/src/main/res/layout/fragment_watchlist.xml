@@ -33,7 +33,7 @@
             android:id="@+id/tvEmptyWatchlist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No watchlists yet. Tap + to add one."
+            android:text="No watchlists yet"
             android:textAppearance="?attr/textAppearanceBodyMedium"
             android:textColor="@color/on_surface_variant"
             android:gravity="center"/>
