@@ -3,6 +3,7 @@ package com.SDE.stocksapp.ui.fragments
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -83,6 +84,15 @@ class watchlistFragment : Fragment(R.layout.fragment_watchlist) {
 
         viewModel.getAllWatchlists().observe(viewLifecycleOwner, Observer { watchlists ->
             watchlistAdapter.differ.submitList(watchlists)
+
+            if (watchlists.isEmpty()){
+                binding.emptyData.visibility = View.VISIBLE
+                binding.rvWatchlist.visibility = View.GONE
+            }
+            else{
+                binding.emptyData.visibility = View.GONE
+                binding.rvWatchlist.visibility = View.VISIBLE
+            }
         })
     }
 
