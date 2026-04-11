@@ -30,7 +30,7 @@
 
         <!-- Status Bar & Navigation Bar -->
         <item name="android:statusBarColor">@color/surface</item>
-<!--        <item name="android:windowLightStatusBar">true</item>-->
+        <item name="android:windowLightStatusBar">true</item>
         <item name="android:navigationBarColor">@color/surface</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
 

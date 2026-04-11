@@ -103,7 +103,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                tools:text="+1.25%" />
+                tools:text="+1.25%"
+                tools:textColor="@color/finance_positive"/>
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
