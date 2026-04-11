@@ -23,12 +23,13 @@ import com.SDE.stocksapp.util.Constants
 import com.SDE.stocksapp.util.Resource
 import com.SDE.stocksapp.util.formatPercentage
 import com.SDE.stocksapp.util.formatPrice
+import com.SDE.stocksapp.ui.fragments.DetailsFragmentArgs
 
-class detailsFragment : Fragment(R.layout.fragment_details) {
+class DetailsFragment : Fragment(R.layout.fragment_details) {
 
     lateinit var binding : FragmentDetailsBinding
     lateinit var viewModel : StockViewModel
-    val args : detailsFragmentArgs by navArgs()
+    val args : DetailsFragmentArgs by navArgs()
 
     private lateinit var bottomSheetDialog: BottomSheetDialog
     private lateinit var dialogBinding: DialogAddToWatchlistBinding

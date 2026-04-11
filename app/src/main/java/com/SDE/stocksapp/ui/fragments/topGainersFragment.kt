@@ -14,7 +14,7 @@ import com.SDE.stocksapp.ui.StockViewModel
 import com.SDE.stocksapp.ui.StocksActivity
 import com.SDE.stocksapp.util.Resource
 
-class topGainersFragment : Fragment(R.layout.fragment_top_gainers) {
+class TopGainersFragment : Fragment(R.layout.fragment_top_gainers) {
 
     lateinit var binding: FragmentTopGainersBinding
     lateinit var viewModel: StockViewModel
@@ -64,13 +64,8 @@ class topGainersFragment : Fragment(R.layout.fragment_top_gainers) {
         })
 
         stockAdapter.setOnItemClickListener {
-            val bundle = Bundle().apply {
-                putSerializable("stock", it)
-            }
-            view.findNavController().navigate(
-                R.id.action_topGainersFragment_to_detailsFragment,
-                bundle
-            )
+            val action = TopGainersFragmentDirections.actionTopGainersFragmentToDetailsFragment(it)
+            view.findNavController().navigate(action)
         }
     }
 

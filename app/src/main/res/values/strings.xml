@@ -2,4 +2,9 @@
     <string name="app_name">Stocks App</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="stocks">Stocks</string>
+    <string name="top_gainers">Top Gainers</string>
+    <string name="view_all">View All</string>
+    <string name="top_losers">Top Losers</string>
+    <string name="view_all2">View All</string>
 </resources>

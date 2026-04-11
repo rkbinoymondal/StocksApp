@@ -2,6 +2,7 @@ package com.SDE.stocksapp.api
 
 import com.SDE.stocksapp.models.DailyResponse
 import com.SDE.stocksapp.models.GainerLoserApiResponse
+import com.SDE.stocksapp.models.GlobalQuoteResponse
 import com.SDE.stocksapp.models.IntradayResponse
 import com.SDE.stocksapp.models.StockDetailsResponse
 import com.SDE.stocksapp.models.WeeklyResponse
@@ -45,4 +46,12 @@ interface StocksAPI {
         @Query("symbol") symbol: String,
         @Query("apikey") apiKey: String = API_KEY
     ): Response<WeeklyResponse>
+
+    @GET("query?function=GLOBAL_QUOTE")
+    suspend fun getGlobalQuote(
+        @Query("symbol")
+        symbol: String,
+        @Query("apikey")
+        apiKey: String = API_KEY
+    ): Response<GlobalQuoteResponse>
 }

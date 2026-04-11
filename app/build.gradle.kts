@@ -80,6 +80,7 @@ dependencies {
     ksp(libs.ksp)
 
     implementation(libs.mpandroidchart)
+    implementation(libs.androidx.swiperefreshlayout)
 
     // For Lottie Animation
     implementation("com.airbnb.android:lottie:6.4.0")
