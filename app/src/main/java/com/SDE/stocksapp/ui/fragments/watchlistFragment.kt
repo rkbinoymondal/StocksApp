@@ -24,10 +24,11 @@ class watchlistFragment : Fragment(R.layout.fragment_watchlist) {
     lateinit var viewModel: StockViewModel
     lateinit var watchlistAdapter: WatchlistAdapter
 
-    private val TAG="watchlistFragment"
+    private val TAG = "watchlistFragment"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding = FragmentWatchlistBinding.bind(view)
         viewModel = (activity as StocksActivity).viewModel
 
@@ -40,6 +41,32 @@ class watchlistFragment : Fragment(R.layout.fragment_watchlist) {
                     putString("watchlistName", it.watchlistName)
                 }
             )
+        }
+
+        watchlistAdapter.setOnDeleteClickListener { watchlist, _ ->
+
+            val stocks: LiveData<List<WatchlistWithStock>> =
+                viewModel.getStocksForWatchlist(watchlist.watchlistName)
+
+            viewModel.deleteWatchlist(watchlist)
+
+            Snackbar.make(view, "Deleted watchlist", Snackbar.LENGTH_LONG).apply {
+                setAction("Undo") {
+                    viewModel.saveWatchlist(watchlist.watchlistName)
+
+                    stocks.observe(viewLifecycleOwner, Observer { list ->
+                        list.forEach { item ->
+                            item.stocks.forEach { stock ->
+                                viewModel.saveStockIntoWatchlists(
+                                    stock,
+                                    listOf(watchlist.watchlistName)
+                                )
+                            }
+                        }
+                    })
+                }
+                show()
+            }
         }
 
         val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
@@ -61,26 +88,34 @@ class watchlistFragment : Fragment(R.layout.fragment_watchlist) {
             ) {
                 val position = viewHolder.adapterPosition
                 val watchlist = watchlistAdapter.differ.currentList[position]
-                val stocks: LiveData<List<WatchlistWithStock>> = viewModel.getStocksForWatchlist(watchlist.watchlistName)
+
+                val stocks: LiveData<List<WatchlistWithStock>> =
+                    viewModel.getStocksForWatchlist(watchlist.watchlistName)
+
                 viewModel.deleteWatchlist(watchlist)
-                Snackbar.make(view, "Successfully deleted watchlist", Snackbar.LENGTH_LONG).apply {
+
+                Snackbar.make(view, "Deleted watchlist", Snackbar.LENGTH_LONG).apply {
                     setAction("Undo") {
                         viewModel.saveWatchlist(watchlist.watchlistName)
-                        stocks.observe(viewLifecycleOwner, Observer { stocks ->
-                            stocks.forEach { stock ->
-                                stock.stocks.forEach {
-                                    viewModel.saveStockIntoWatchlists(it, listOf(watchlist.watchlistName))
+
+                        stocks.observe(viewLifecycleOwner, Observer { list ->
+                            list.forEach { item ->
+                                item.stocks.forEach { stock ->
+                                    viewModel.saveStockIntoWatchlists(
+                                        stock,
+                                        listOf(watchlist.watchlistName)
+                                    )
                                 }
                             }
                         })
                     }
+                    show()
                 }
             }
         }
 
-        ItemTouchHelper(itemTouchHelperCallback).apply{
-            attachToRecyclerView(binding.rvWatchlist)
-        }
+        ItemTouchHelper(itemTouchHelperCallback)
+            .attachToRecyclerView(binding.rvWatchlist)
 
         viewModel.getAllWatchlists().observe(viewLifecycleOwner, Observer { watchlists ->
             watchlistAdapter.differ.submitList(watchlists)
@@ -96,12 +131,11 @@ class watchlistFragment : Fragment(R.layout.fragment_watchlist) {
         })
     }
 
-    fun setupRecyclerView() {
+    private fun setupRecyclerView() {
         watchlistAdapter = WatchlistAdapter()
         binding.rvWatchlist.apply {
             adapter = watchlistAdapter
             setHasFixedSize(true)
         }
     }
-
 }

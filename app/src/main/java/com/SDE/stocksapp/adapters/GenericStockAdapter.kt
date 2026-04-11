@@ -1,7 +1,7 @@
 package com.SDE.stocksapp.adapters
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -14,17 +14,19 @@ import com.SDE.stocksapp.util.formatPercentage
 import com.SDE.stocksapp.util.formatPrice
 import java.util.Locale
 
-class GenericStockAdapter : RecyclerView.Adapter<GenericStockAdapter.StockViewHolder>() {
+class GenericStockAdapter :
+    RecyclerView.Adapter<GenericStockAdapter.StockViewHolder>() {
 
     inner class StockViewHolder(val binding: ItemStockCardBinding) :
         RecyclerView.ViewHolder(binding.root)
+
+    var showDeleteButton = false
 
     private val differCallback = object : DiffUtil.ItemCallback<Stock>() {
         override fun areItemsTheSame(oldItem: Stock, newItem: Stock): Boolean {
             return oldItem.ticker == newItem.ticker
         }
 
-        @SuppressLint("DiffUtilEquals")
         override fun areContentsTheSame(oldItem: Stock, newItem: Stock): Boolean {
             return oldItem == newItem
         }
@@ -42,40 +44,58 @@ class GenericStockAdapter : RecyclerView.Adapter<GenericStockAdapter.StockViewHo
     }
 
     override fun onBindViewHolder(holder: StockViewHolder, position: Int) {
+
         val stock = differ.currentList[position]
-        holder.binding.apply {
-//            if(stock.urlToImage != null) {
-//                Glide.with(holder.itemView).load(stock.urlToImage).into(ivStockIcon)
-//            }
-            tvStockIconText.text = stock.ticker.take(1).uppercase(Locale.getDefault())
+        val binding = holder.binding
 
-            tvStockName.text = stock.ticker
-            tvCompanyName.text = stock.ticker // Fallback if name is not in Stock model
+        binding.tvStockIconText.text =
+            stock.ticker.take(1).uppercase(Locale.getDefault())
 
-            tvStockPrice.text = stock.price.formatPrice()
-            tvStockChange.text = stock.change_percentage.formatPercentage()
+        binding.tvStockName.text = stock.ticker
+        binding.tvCompanyName.text = stock.ticker
 
-            val changePercent = stock.change_percentage.replace("%", "").toDoubleOrNull() ?: 0.0
-            val colorRes = if (changePercent >= 0) {
-                R.color.finance_positive
-            } else {
-                R.color.finance_negative
-            }
-            tvStockChange.setTextColor(ContextCompat.getColor(root.context, colorRes))
+        binding.tvStockPrice.text = stock.price.formatPrice()
+        binding.tvStockChange.text = stock.change_percentage.formatPercentage()
 
-            root.setOnClickListener {
-                onItemClickListener?.let { it(stock) }
+        val changePercent =
+            stock.change_percentage.replace("%", "").toDoubleOrNull() ?: 0.0
+
+        val colorRes = if (changePercent >= 0) {
+            R.color.finance_positive
+        } else {
+            R.color.finance_negative
+        }
+
+        binding.tvStockChange.setTextColor(
+            ContextCompat.getColor(binding.root.context, colorRes)
+        )
+
+        binding.btnDeleteStock.visibility =
+            if (showDeleteButton) View.VISIBLE else View.GONE
+
+        binding.root.setOnClickListener {
+            onItemClickListener?.invoke(stock)
+        }
+
+        binding.btnDeleteStock.setOnClickListener {
+            val pos = holder.adapterPosition   // ✅ FIXED LINE
+            if (pos != RecyclerView.NO_POSITION) {
+                onDeleteClickListener?.invoke(stock, pos)
             }
         }
     }
 
-    override fun getItemCount(): Int {
-        return differ.currentList.size
-    }
+    override fun getItemCount(): Int = differ.currentList.size
 
     private var onItemClickListener: ((Stock) -> Unit)? = null
 
     fun setOnItemClickListener(listener: (Stock) -> Unit) {
         onItemClickListener = listener
+    }
+
+    private var onDeleteClickListener: ((Stock, Int) -> Unit)? = null
+
+    fun setOnDeleteClickListener(listener: (Stock, Int) -> Unit) {
+        onDeleteClickListener = listener
     }
 }

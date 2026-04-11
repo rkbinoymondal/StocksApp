@@ -1,18 +1,15 @@
 package com.SDE.stocksapp.adapters
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.SDE.stocksapp.adapters.GenericStockAdapter.StockViewHolder
-import com.SDE.stocksapp.databinding.ItemStockCardBinding
 import com.SDE.stocksapp.databinding.WatchlistCardBinding
-import com.SDE.stocksapp.models.Stock
 import com.SDE.stocksapp.models.Watchlist
 
-class WatchlistAdapter :  RecyclerView.Adapter<WatchlistAdapter.WatchlistViewHolder>() {
+class WatchlistAdapter :
+    RecyclerView.Adapter<WatchlistAdapter.WatchlistViewHolder>() {
 
     inner class WatchlistViewHolder(val binding: WatchlistCardBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -22,7 +19,6 @@ class WatchlistAdapter :  RecyclerView.Adapter<WatchlistAdapter.WatchlistViewHol
             return oldItem.watchlistName == newItem.watchlistName
         }
 
-        @SuppressLint("DiffUtilEquals")
         override fun areContentsTheSame(oldItem: Watchlist, newItem: Watchlist): Boolean {
             return oldItem == newItem
         }
@@ -41,22 +37,31 @@ class WatchlistAdapter :  RecyclerView.Adapter<WatchlistAdapter.WatchlistViewHol
 
     override fun onBindViewHolder(holder: WatchlistViewHolder, position: Int) {
         val watchlist = differ.currentList[position]
-        holder.binding.apply {
-            tvWatchlistName.text = watchlist.watchlistName
-            root.setOnClickListener {
-                onItemClickListener?.let { it(watchlist) }
+        val binding = holder.binding
+
+        binding.tvWatchlistName.text = watchlist.watchlistName
+
+        binding.root.setOnClickListener {
+            onItemClickListener?.invoke(watchlist)
+        }
+
+        binding.btnDeleteWatchlist.setOnClickListener {
+            val pos = holder.adapterPosition
+            if (pos != RecyclerView.NO_POSITION) {
+                onDeleteClickListener?.invoke(watchlist, pos)
             }
         }
     }
 
-    override fun getItemCount(): Int {
-        return differ.currentList.size
-    }
+    override fun getItemCount(): Int = differ.currentList.size
 
     private var onItemClickListener: ((Watchlist) -> Unit)? = null
-
     fun setOnItemClickListener(listener: (Watchlist) -> Unit) {
         onItemClickListener = listener
     }
 
+    private var onDeleteClickListener: ((Watchlist, Int) -> Unit)? = null
+    fun setOnDeleteClickListener(listener: (Watchlist, Int) -> Unit) {
+        onDeleteClickListener = listener
+    }
 }
