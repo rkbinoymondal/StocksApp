@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.SDE.stocksapp.ui.fragments.homeFragment"
+        android:name="com.SDE.stocksapp.ui.fragments.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/watchlistFragment"
-        android:name="com.SDE.stocksapp.ui.fragments.watchlistFragment"
+        android:name="com.SDE.stocksapp.ui.fragments.WatchlistFragment"
         android:label="fragment_watchlist"
         tools:layout="@layout/fragment_watchlist" >
         <action
@@ -54,7 +54,7 @@
     </fragment>
     <fragment
         android:id="@+id/detailsFragment"
-        android:name="com.SDE.stocksapp.ui.fragments.detailsFragment"
+        android:name="com.SDE.stocksapp.ui.fragments.DetailsFragment"
         android:label="detailsFragment" >
         <argument
             android:name="stock"
@@ -62,7 +62,7 @@
     </fragment>
     <fragment
         android:id="@+id/topGainersFragment"
-        android:name="com.SDE.stocksapp.ui.fragments.topGainersFragment"
+        android:name="com.SDE.stocksapp.ui.fragments.TopGainersFragment"
         android:label="topGainersFragment" >
         <action
             android:id="@+id/action_topGainersFragment_to_detailsFragment"
@@ -74,7 +74,7 @@
     </fragment>
     <fragment
         android:id="@+id/topLosersFragment"
-        android:name="com.SDE.stocksapp.ui.fragments.topLosersFragment"
+        android:name="com.SDE.stocksapp.ui.fragments.TopLosersFragment"
         android:label="topLosersFragment" >
         <action
             android:id="@+id/action_topLosersFragment_to_detailsFragment"
@@ -86,7 +86,7 @@
     </fragment>
     <fragment
         android:id="@+id/watchlistStocksFragment"
-        android:name="com.SDE.stocksapp.ui.fragments.watchlistStocksFragment"
+        android:name="com.SDE.stocksapp.ui.fragments.WatchlistStocksFragment"
         android:label="fragment_watchlist_stocks"
         tools:layout="@layout/fragment_watchlist_stocks" >
         <argument

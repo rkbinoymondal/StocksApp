@@ -17,7 +17,7 @@ import com.SDE.stocksapp.ui.StockViewModel
 import com.SDE.stocksapp.ui.StocksActivity
 import com.google.android.material.snackbar.Snackbar
 
-class watchlistFragment : Fragment(R.layout.fragment_watchlist) {
+class WatchlistFragment : Fragment(R.layout.fragment_watchlist) {
 
     lateinit var binding: FragmentWatchlistBinding
     lateinit var viewModel: StockViewModel

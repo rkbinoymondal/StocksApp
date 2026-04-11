@@ -16,12 +16,12 @@ import com.SDE.stocksapp.ui.StockViewModel
 import com.SDE.stocksapp.ui.StocksActivity
 import com.google.android.material.snackbar.Snackbar
 
-class watchlistStocksFragment : Fragment(R.layout.fragment_watchlist_stocks) {
+class WatchlistStocksFragment : Fragment(R.layout.fragment_watchlist_stocks) {
 
     lateinit var binding: FragmentWatchlistStocksBinding
     lateinit var viewModel: StockViewModel
     lateinit var stockAdapter: GenericStockAdapter
-    val args: watchlistStocksFragmentArgs by navArgs()
+    val args: WatchlistStocksFragmentArgs by navArgs()
 
     private val TAG="watchlistStocksFragment"
 
@@ -40,13 +40,8 @@ class watchlistStocksFragment : Fragment(R.layout.fragment_watchlist_stocks) {
         })
 
         stockAdapter.setOnItemClickListener {
-            val bundle = Bundle().apply {
-                putSerializable("stock", it)
-            }
-            view.findNavController().navigate(
-                R.id.action_watchlistStocksFragment_to_detailsFragment,
-                bundle
-            )
+            val action = WatchlistStocksFragmentDirections.actionWatchlistStocksFragmentToDetailsFragment(it)
+            view.findNavController().navigate(action)
         }
 
         val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(

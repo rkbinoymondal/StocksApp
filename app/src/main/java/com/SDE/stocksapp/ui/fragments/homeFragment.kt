@@ -14,7 +14,7 @@ import com.SDE.stocksapp.ui.StockViewModel
 import com.SDE.stocksapp.ui.StocksActivity
 import com.SDE.stocksapp.util.Resource
 
-class homeFragment : Fragment(R.layout.fragment_home) {
+class HomeFragment : Fragment(R.layout.fragment_home) {
 
     lateinit var binding: FragmentHomeBinding
     lateinit var viewModel: StockViewModel
@@ -31,12 +31,17 @@ class homeFragment : Fragment(R.layout.fragment_home) {
         setupRecyclerViewGainers()
         setupRecyclerViewLosers()
 
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            viewModel.getTopGainersLosers()
+        }
+
         viewModel.topGainersLosers.observe(viewLifecycleOwner, Observer { response ->
             when (response) {
                 is Resource.Success -> {
                     hideProgressBar()
+                    binding.swipeRefreshLayout.isRefreshing = false
                     response.data?.let { gainersLosersResponse ->
-                        if (gainersLosersResponse.top_gainers != null && gainersLosersResponse.top_gainers.isNotEmpty()) {
+                        if (gainersLosersResponse.top_gainers.isNotEmpty()) {
                             val gainers = gainersLosersResponse.top_gainers.take(3).map { topGainer ->
                                 Stock(
                                     ticker = topGainer.ticker,
@@ -49,7 +54,7 @@ class homeFragment : Fragment(R.layout.fragment_home) {
                             stockAdapterGainer.differ.submitList(gainers)
                         }
                         
-                        if (gainersLosersResponse.top_losers != null && gainersLosersResponse.top_losers.isNotEmpty()) {
+                        if (gainersLosersResponse.top_losers.isNotEmpty()) {
                             val losers = gainersLosersResponse.top_losers.take(3).map { topLoser ->
                                 Stock(
                                     ticker = topLoser.ticker,
@@ -66,6 +71,7 @@ class homeFragment : Fragment(R.layout.fragment_home) {
 
                 is Resource.Error -> {
                     hideProgressBar()
+                    binding.swipeRefreshLayout.isRefreshing = false
                     response.message?.let { message ->
                         Log.e(TAG, "An error occurred: $message")
                     }
@@ -78,32 +84,22 @@ class homeFragment : Fragment(R.layout.fragment_home) {
         })
 
         binding.tvGainersViewAll.setOnClickListener {
-            val action = homeFragmentDirections.actionHomeFragmentToTopGainersFragment()
+            val action = HomeFragmentDirections.actionHomeFragmentToTopGainersFragment()
             view.findNavController().navigate(action)
         }
         binding.tvLosersViewAll.setOnClickListener {
-            val action = homeFragmentDirections.actionHomeFragmentToTopLosersFragment()
+            val action = HomeFragmentDirections.actionHomeFragmentToTopLosersFragment()
             view.findNavController().navigate(action)
         }
         
         stockAdapterGainer.setOnItemClickListener {
-            val bundle = Bundle().apply {
-                putSerializable("stock", it)
-            }
-            view.findNavController().navigate(
-                R.id.action_homeFragment_to_detailsFragment,
-                bundle
-            )
+            val action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(it)
+            view.findNavController().navigate(action)
         }
         
         stockAdapterLoser.setOnItemClickListener {
-            val bundle = Bundle().apply {
-                putSerializable("stock", it)
-            }
-            view.findNavController().navigate(
-                R.id.action_homeFragment_to_detailsFragment,
-                bundle
-            )
+            val action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(it)
+            view.findNavController().navigate(action)
         }
     }
 

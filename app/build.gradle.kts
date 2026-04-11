@@ -80,5 +80,6 @@ dependencies {
     ksp(libs.ksp)
 
     implementation(libs.mpandroidchart)
+    implementation(libs.androidx.swiperefreshlayout)
 
 }
