@@ -22,6 +22,38 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="Demo 1"/>
 
+    <LinearLayout
+        android:id="@+id/emptyData"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/tvWatchlistName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/lottieEmpty"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            app:lottie_fileName="no_history.json"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"/>
+
+        <TextView
+            android:id="@+id/tvEmptyWatchlist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No stocks yet"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="@color/on_surface_variant"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvWatchlistStocks"
         android:layout_width="0dp"

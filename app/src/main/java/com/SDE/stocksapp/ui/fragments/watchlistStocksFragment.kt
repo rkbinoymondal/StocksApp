@@ -35,12 +35,20 @@ class watchlistStocksFragment : Fragment(R.layout.fragment_watchlist_stocks) {
 
         setupRecyclerView()
 
-        viewModel.getStocksForWatchlist(args.watchlistName)
-            .observe(viewLifecycleOwner, Observer { list ->
-                list.forEach {
-                    stockAdapter.differ.submitList(it.stocks)
+        viewModel.getStocksForWatchlist(args.watchlistName).observe(viewLifecycleOwner, Observer { stocks ->
+            stocks.forEach { stock ->
+                stockAdapter.differ.submitList(stock.stocks)
+
+                if (stock.stocks.isEmpty()){
+                    binding.emptyData.visibility = View.VISIBLE
+                    binding.rvWatchlistStocks.visibility = View.GONE
                 }
-            })
+                else{
+                    binding.emptyData.visibility = View.GONE
+                    binding.rvWatchlistStocks.visibility = View.VISIBLE
+                }
+            }
+        })
 
         stockAdapter.setOnItemClickListener {
             val bundle = Bundle().apply {
