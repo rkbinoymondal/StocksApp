@@ -1,8 +1,10 @@
 package com.SDE.stocksapp.ui
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -17,6 +19,9 @@ class StocksActivity : AppCompatActivity() {
     lateinit var viewModel: StockViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        installSplashScreen().setKeepOnScreenCondition { false }
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
@@ -31,6 +36,17 @@ class StocksActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.stocksNavHostFragment) as NavHostFragment
         val navController = navHostFragment.navController
         binding.bottomNavigationView.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener { _,destination,_ ->
+            when(destination.id){
+                R.id.splashFragment -> {
+                    binding.bottomNavigationView.visibility = View.GONE
+                }
+                else -> {
+                    binding.bottomNavigationView.visibility = View.VISIBLE
+                }
+            }
+        }
 
     }
 }
