@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.SDE.stocksapp.StocksApplication
 import com.SDE.stocksapp.models.DailyResponse
 import com.SDE.stocksapp.models.GainerLoserApiResponse
+import com.SDE.stocksapp.models.GlobalQuoteResponse
 import com.SDE.stocksapp.models.IntradayResponse
 import com.SDE.stocksapp.models.Stock
 import com.SDE.stocksapp.models.StockDetailsResponse
@@ -21,10 +22,20 @@ import com.SDE.stocksapp.repository.StockRepository
 import com.SDE.stocksapp.util.Constants
 import com.SDE.stocksapp.util.Resource
 import com.github.mikephil.charting.data.Entry
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.io.IOException
 
+@OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class StockViewModel(
     app: Application,
     val repository: StockRepository
@@ -36,8 +47,55 @@ class StockViewModel(
     private val _chartData = MutableLiveData<List<Entry>>()
     val chartData: LiveData<List<Entry>> = _chartData
 
+    private val _search = MutableStateFlow("")
+    val searchQuery = _search.asStateFlow()
+
+    val searchResult: MutableLiveData<Resource<GlobalQuoteResponse>> = MutableLiveData()
+
     init {
         getTopGainersLosers()
+        observeSearchQuery()
+    }
+
+    private fun observeSearchQuery() {
+        _search
+            .debounce(500L)
+            .distinctUntilChanged()
+            .filter { it.isNotBlank() }
+            .onEach { query ->
+                searchResult.postValue(Resource.Loading())
+                safeGetGlobalQuoteCall(query)
+            }
+            .launchIn(viewModelScope)
+    }
+
+    fun searchStock(query: String) {
+        _search.value = query
+    }
+
+    private suspend fun safeGetGlobalQuoteCall(symbol: String) {
+        try {
+            if (hasInternetConnection()) {
+                val response = repository.getGlobalQuote(symbol)
+                searchResult.postValue(handleGlobalQuoteResponse(response))
+            } else {
+                searchResult.postValue(Resource.Error("No internet connection"))
+            }
+        } catch (t: Throwable) {
+            when (t) {
+                is IOException -> searchResult.postValue(Resource.Error("Network Failure"))
+                else -> searchResult.postValue(Resource.Error("Conversion Error"))
+            }
+        }
+    }
+
+    private fun handleGlobalQuoteResponse(response: Response<GlobalQuoteResponse>) : Resource<GlobalQuoteResponse> {
+        if(response.isSuccessful) {
+            response.body()?.let { resultResponse ->
+                return Resource.Success(resultResponse)
+            }
+        }
+        return Resource.Error(response.message())
     }
 
     fun getTopGainersLosers() = viewModelScope.launch {

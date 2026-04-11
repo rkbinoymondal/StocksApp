@@ -19,6 +19,7 @@
         <activity
             android:name=".ui.StocksActivity"
             android:theme="@style/Theme.StocksApp"
+            android:windowSoftInputMode="adjustPan"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

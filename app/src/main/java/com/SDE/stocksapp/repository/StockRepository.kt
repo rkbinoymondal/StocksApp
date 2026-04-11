@@ -2,9 +2,11 @@ package com.SDE.stocksapp.repository
 
 import com.SDE.stocksapp.api.RetrofitInstance
 import com.SDE.stocksapp.db.StockDatabase
+import com.SDE.stocksapp.models.GlobalQuoteResponse
 import com.SDE.stocksapp.models.Stock
 import com.SDE.stocksapp.models.Watchlist
 import com.SDE.stocksapp.models.WatchlistStockCrossRef
+import retrofit2.Response
 
 class StockRepository(
     private val db: StockDatabase
@@ -52,5 +54,6 @@ class StockRepository(
 
     suspend fun getWeekly(symbol: String) = RetrofitInstance.api.getWeekly(symbol)
 
+    suspend fun getGlobalQuote(symbol: String) = RetrofitInstance.api.getGlobalQuote(symbol)
 
 }
