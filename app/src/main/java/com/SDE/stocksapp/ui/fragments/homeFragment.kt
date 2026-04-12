@@ -43,7 +43,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     hideProgressBar()
                     binding.swipeRefreshLayout.isRefreshing = false
                     response.data?.let { gainersLosersResponse ->
-                        if (gainersLosersResponse.top_gainers.isNotEmpty()) {
+                        if (!gainersLosersResponse.top_gainers.isNullOrEmpty()) {
                             val gainers = gainersLosersResponse.top_gainers.take(3).map { topGainer ->
                                 Stock(
                                     ticker = topGainer.ticker,
@@ -56,7 +56,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                             stockAdapterGainer.differ.submitList(gainers)
                         }
 
-                        if (gainersLosersResponse.top_losers.isNotEmpty()) {
+                        if (!gainersLosersResponse.top_losers.isNullOrEmpty()) {
                             val losers = gainersLosersResponse.top_losers.take(3).map { topLoser ->
                                 Stock(
                                     ticker = topLoser.ticker,

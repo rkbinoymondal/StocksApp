@@ -35,7 +35,7 @@ class TopGainersFragment : Fragment(R.layout.fragment_top_gainers) {
             when (response) {
                 is Resource.Success -> {
                     response.data?.let { gainersLosersResponse ->
-                        if (gainersLosersResponse.top_gainers.isNotEmpty()) {
+                        if (!gainersLosersResponse.top_gainers.isNullOrEmpty()) {
                             gainers = gainersLosersResponse.top_gainers.map { topGainer ->
                                 Stock(
                                     ticker = topGainer.ticker,
