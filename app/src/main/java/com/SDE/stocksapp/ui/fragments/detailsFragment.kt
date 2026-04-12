@@ -219,17 +219,15 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     }
 
     private fun drawChart(entries: List<Entry>) = binding.lineChart.apply {
-        // 1) Clear any old data
         clear()
         data?.clearValues()
 
-        // 2) Create your DataSet
         val dataSet = LineDataSet(entries, "Price")
             .apply {
-                mode = LineDataSet.Mode.CUBIC_BEZIER        // a smooth curve
-                lineWidth = 2f                             // make it a bit thicker
-                setDrawCircles(false)                      // hide point circles
-                setDrawValues(false)                       // hide value labels
+                mode = LineDataSet.Mode.CUBIC_BEZIER
+                lineWidth = 2f
+                setDrawCircles(false)
+                setDrawValues(false)
             }
 
         // 3) Set up axes & disable description

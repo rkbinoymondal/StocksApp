@@ -17,16 +17,23 @@
         android:theme="@style/Theme.StocksApp"
         tools:targetApi="31">
         <activity
-            android:name=".ui.StocksActivity"
-            android:theme="@style/Theme.StocksApp"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="true">
+            android:name=".ui.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.StocksApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.StocksActivity"
+            android:theme="@style/Theme.StocksApp"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="false" />
+        <activity
+            android:name=".ui.auth.LoginActivity"
+            android:exported="false"
+            android:theme="@style/Theme.StocksApp" />
     </application>
 
 </manifest>
