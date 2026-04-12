@@ -3,6 +3,7 @@ package com.SDE.stocksapp.ui.fragments
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -43,31 +44,38 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     hideProgressBar()
                     binding.swipeRefreshLayout.isRefreshing = false
                     response.data?.let { gainersLosersResponse ->
-                        if (gainersLosersResponse.top_gainers.isNotEmpty()) {
-                            val gainers = gainersLosersResponse.top_gainers.take(3).map { topGainer ->
-                                Stock(
-                                    ticker = topGainer.ticker,
-                                    change_amount = topGainer.change_amount,
-                                    change_percentage = topGainer.change_percentage,
-                                    price = topGainer.price,
-                                    volume = topGainer.volume
-                                )
+
+                        if (gainersLosersResponse.top_gainers == null && gainersLosersResponse.top_losers == null){
+                            Toast.makeText(requireContext(),"Something Went Wrong",Toast.LENGTH_SHORT).show()
+                        }
+                        else{
+                            if (!gainersLosersResponse.top_gainers.isNullOrEmpty()) {
+                                val gainers = gainersLosersResponse.top_gainers.take(3).map { topGainer ->
+                                    Stock(
+                                        ticker = topGainer.ticker,
+                                        change_amount = topGainer.change_amount,
+                                        change_percentage = topGainer.change_percentage,
+                                        price = topGainer.price,
+                                        volume = topGainer.volume
+                                    )
+                                }
+                                stockAdapterGainer.differ.submitList(gainers)
                             }
-                            stockAdapterGainer.differ.submitList(gainers)
+
+                            if (!gainersLosersResponse.top_losers.isNullOrEmpty()) {
+                                val losers = gainersLosersResponse.top_losers.take(3).map { topLoser ->
+                                    Stock(
+                                        ticker = topLoser.ticker,
+                                        change_amount = topLoser.change_amount,
+                                        change_percentage = topLoser.change_percentage,
+                                        price = topLoser.price,
+                                        volume = topLoser.volume
+                                    )
+                                }
+                                stockAdapterLoser.differ.submitList(losers)
+                            }
                         }
 
-                        if (gainersLosersResponse.top_losers.isNotEmpty()) {
-                            val losers = gainersLosersResponse.top_losers.take(3).map { topLoser ->
-                                Stock(
-                                    ticker = topLoser.ticker,
-                                    change_amount = topLoser.change_amount,
-                                    change_percentage = topLoser.change_percentage,
-                                    price = topLoser.price,
-                                    volume = topLoser.volume
-                                )
-                            }
-                            stockAdapterLoser.differ.submitList(losers)
-                        }
                     }
                 }
 
@@ -76,6 +84,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     binding.swipeRefreshLayout.isRefreshing = false
                     response.message?.let { message ->
                         Log.e(TAG, "An error occurred: $message")
+
+                        val errorMsg = if (!isNetworkAvailable()){
+                            "No Internet Connection"
+                        }
+                        else{
+                            "Something Went Wrong"
+                        }
+                        Toast.makeText(requireContext(),errorMsg,Toast.LENGTH_SHORT).show()
                     }
                 }
 
@@ -183,4 +199,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             adapter = stockAdapterLoser
         }
     }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = requireContext().getSystemService(android.content.Context.CONNECTIVITY_SERVICE) as android.net.ConnectivityManager
+        val activeNetwork = connectivityManager.activeNetwork ?: return false
+        val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
+        return capabilities.hasCapability(android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET)
+    }
+
 }
