@@ -207,6 +207,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:orientation="horizontal"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@+id/guidelineStart"
             app:layout_constraintTop_toBottomOf="@id/tvAboutDescription">
@@ -219,6 +220,7 @@
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="6dp"
                 android:textColor="@color/primary"
+                android:visibility="gone"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 tools:text="Technology" />
@@ -234,6 +236,7 @@
                 android:textColor="@color/primary"
                 android:textSize="12sp"
                 android:textStyle="bold"
+                android:visibility="gone"
                 tools:text="Consumer Electronics" />
         </LinearLayout>
 
