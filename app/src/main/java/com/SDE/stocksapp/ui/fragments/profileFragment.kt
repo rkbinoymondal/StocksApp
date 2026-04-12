@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.SDE.stocksapp.R
@@ -56,9 +57,11 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     fireBaseAuthWithGoogle(account.idToken!!)
                 } catch (e: ApiException) {
                     Log.e(TAG, "Google sign in failed", e)
+                    Toast.makeText(requireContext(), "Google Sign In Failed", Toast.LENGTH_SHORT).show()
                 }
             } else {
                 Log.e(TAG, "Google sign in task failed: ${task.exception?.message}")
+                Toast.makeText(requireContext(), "Google Sign In Failed", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -68,11 +71,13 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "Firebase auth successful, navigating to home")
+                    Toast.makeText(requireContext(), "Authentication Successful", Toast.LENGTH_SHORT).show()
                     val user = mAuth.currentUser
                     findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
 
                 } else {
                     Log.e(TAG, "Firebase signInWithCredential:failure", task.exception)
+                    Toast.makeText(requireContext(), "Authentication Failed", Toast.LENGTH_SHORT).show()
                 }
             }
     }
