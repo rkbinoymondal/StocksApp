@@ -55,7 +55,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                             }
                             stockAdapterGainer.differ.submitList(gainers)
                         }
-                        
+
                         if (gainersLosersResponse.top_losers.isNotEmpty()) {
                             val losers = gainersLosersResponse.top_losers.take(3).map { topLoser ->
                                 Stock(
@@ -103,7 +103,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                             binding.searchResultItem.tvStockIconText.text = quote.symbol.take(1)
                             binding.searchResultItem.tvStockPrice.text = quote.price
                             binding.searchResultItem.tvStockChange.text = quote.changePercent
-                            
+
                             binding.cvSearchResult.setOnClickListener {
                                 val action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(stock)
                                 view.findNavController().navigate(action)
@@ -132,12 +132,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             val action = HomeFragmentDirections.actionHomeFragmentToTopLosersFragment()
             view.findNavController().navigate(action)
         }
-        
+
         stockAdapterGainer.setOnItemClickListener {
             val action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(it)
             view.findNavController().navigate(action)
         }
-        
+
         stockAdapterLoser.setOnItemClickListener {
             val action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(it)
             view.findNavController().navigate(action)

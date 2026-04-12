@@ -59,8 +59,61 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
                                 tvPriceChange.text = args.stock.change_percentage.formatPercentage()
                                 tvAboutTitle.text = "About ${stockDetailsResponse.Name}"
                                 tvAboutDescription.text = stockDetailsResponse.Description
+
                                 tvIndustryTag.text = stockDetailsResponse.Industry
                                 tvSectorTag.text = stockDetailsResponse.Sector
+
+                                if (stockDetailsResponse.Industry.isNullOrEmpty() && stockDetailsResponse.Sector.isNullOrEmpty()){
+                                    llTags.visibility = View.GONE
+                                    tvIndustryTag.visibility = View.GONE
+                                    tvSectorTag.visibility = View.GONE
+                                }
+                                else if (!stockDetailsResponse.Industry.isNullOrEmpty() && !stockDetailsResponse.Sector.isNullOrEmpty()){
+                                    if (stockDetailsResponse.Industry.lowercase().trim() == "none" && stockDetailsResponse.Sector.lowercase().trim() == "none"){
+                                        llTags.visibility = View.GONE
+                                        tvIndustryTag.visibility = View.GONE
+                                        tvSectorTag.visibility = View.GONE
+                                    }
+                                    else if (stockDetailsResponse.Industry.lowercase().trim() == "none"){
+                                        llTags.visibility = View.VISIBLE
+                                        tvIndustryTag.visibility = View.GONE
+                                        tvSectorTag.visibility = View.VISIBLE
+                                    }
+                                    else if (stockDetailsResponse.Sector.lowercase().trim() == "none"){
+                                        llTags.visibility = View.VISIBLE
+                                        tvIndustryTag.visibility = View.VISIBLE
+                                        tvSectorTag.visibility = View.GONE
+                                    }
+                                    else {
+                                        llTags.visibility = View.VISIBLE
+                                        tvIndustryTag.visibility = View.VISIBLE
+                                        tvSectorTag.visibility = View.VISIBLE
+                                    }
+                                }
+                                else if(stockDetailsResponse.Industry.isNullOrEmpty()){
+                                    if (stockDetailsResponse.Sector.lowercase().trim() == "none"){
+                                        llTags.visibility = View.GONE
+                                        tvIndustryTag.visibility = View.GONE
+                                        tvSectorTag.visibility = View.GONE
+                                    }
+                                    else{
+                                        llTags.visibility = View.VISIBLE
+                                        tvIndustryTag.visibility = View.GONE
+                                        tvSectorTag.visibility = View.VISIBLE
+                                    }
+                                }
+                                else if (stockDetailsResponse.Sector.isNullOrEmpty()){
+                                    if (stockDetailsResponse.Industry.lowercase().trim() == "none"){
+                                        llTags.visibility = View.GONE
+                                        tvIndustryTag.visibility = View.GONE
+                                        tvSectorTag.visibility = View.GONE
+                                    }
+                                    else{
+                                        llTags.visibility = View.VISIBLE
+                                        tvIndustryTag.visibility = View.VISIBLE
+                                        tvSectorTag.visibility = View.GONE
+                                    }
+                                }
                                 tvLowPrice.text = stockDetailsResponse.`52WeekLow`.formatPrice()
                                 tvHighPrice.text = stockDetailsResponse.`52WeekHigh`.formatPrice()
                                 tvCurrentPriceStat.text = "Current Price"
