@@ -3,35 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/stocks_nav_graph.xml"
-    app:startDestination="@id/splashFragment">
+    app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.SDE.stocksapp.ui.fragments.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
+        android:label="Home"
+        tools:layout="@layout/fragment_home">
+
         <action
             android:id="@+id/action_homeFragment_to_topGainersFragment"
-            app:destination="@id/topGainersFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:destination="@id/topGainersFragment" />
+
         <action
             android:id="@+id/action_homeFragment_to_topLosersFragment"
-            app:destination="@id/topLosersFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:destination="@id/topLosersFragment" />
+
         <action
             android:id="@+id/action_homeFragment_to_detailsFragment"
-            app:destination="@id/detailsFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:destination="@id/detailsFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/profileDetailsFragment"
+        android:name="com.SDE.stocksapp.ui.fragments.ProfileDetailsFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile_details" />
     <fragment
         android:id="@+id/watchlistFragment"
         android:name="com.SDE.stocksapp.ui.fragments.WatchlistFragment"
@@ -103,12 +100,31 @@
     <fragment
         android:id="@+id/splashFragment"
         android:name="com.SDE.stocksapp.splashFragment"
-        android:label="fragment_splash"
-        tools:layout="@layout/fragment_splash" >
+        android:label="Splash"
+        tools:layout="@layout/fragment_splash">
+
         <action
             android:id="@+id/action_splashFragment_to_homeFragment"
             app:destination="@id/homeFragment"
             app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true"/>
+
+        <action
+            android:id="@+id/action_splashFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.SDE.stocksapp.ui.fragments.ProfileFragment"
+        android:label="Login"
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_loginFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true"/>
     </fragment>
 

@@ -11,4 +11,9 @@
         android:title="Watchlists"
         android:icon="@drawable/ic_watchlist"/>
 
+    <item
+        android:id="@+id/profileDetailsFragment"
+        android:title="Profile"
+        android:icon="@drawable/ic_person" />
+
 </menu>

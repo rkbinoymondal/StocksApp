@@ -25,13 +25,13 @@ class splashFragment : Fragment(R.layout.fragment_splash) {
                 is Resource.Success -> {
                     if (!isNavigated){
                         isNavigated = true
-                        findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+                        findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
                     }
                 }
                 is Resource.Error -> {
                     if (!isNavigated){
                         isNavigated = true
-                        findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+                        findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
                     }
                 }
             }

@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.googleKsp)
     id("androidx.navigation.safeargs.kotlin")
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -45,13 +46,20 @@ android {
 dependencies {
 
     implementation(libs.androidx.core.ktx)
+    implementation(libs.play.services.auth)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.swiperefreshlayout)
+    implementation(libs.firebase.database)
+    implementation(libs.firebase.auth)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
+    implementation(libs.lottie)
+    implementation(libs.androidx.core.splashscreen)
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
 
     // Architectural Components
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
@@ -80,12 +88,4 @@ dependencies {
     ksp(libs.ksp)
 
     implementation(libs.mpandroidchart)
-    implementation(libs.androidx.swiperefreshlayout)
-
-    // For Lottie Animation
-    implementation("com.airbnb.android:lottie:6.4.0")
-
-    // For Splash Screen
-    implementation("androidx.core:core-splashscreen:1.0.1")
-
 }
